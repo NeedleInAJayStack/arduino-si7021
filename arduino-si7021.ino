@@ -10,10 +10,13 @@ char pass[] = SECRET_PASS;
 WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
 
-const char broker[] = "JaysDesktop.local";
-int        port     = 1883;
-const char topicTemperature[]  = "test_device.temperature";
-const char topicHumidity[]  = "test_device.humidity";
+const String deviceId = "basement";
+
+// const char broker[] = "JaysDesktop.local";
+const IPAddress* broker = new IPAddress(192, 168, 4, 100);
+const int port = 1883;
+const String topicTemperature = deviceId + ".temperature";
+const String topicHumidity = deviceId + ".humidity";
 
 const long interval = 1000; // milliseconds
 unsigned long previousMillis = 0;
@@ -21,8 +24,6 @@ unsigned long previousMillis = 0;
 Adafruit_Si7021 si7021 = Adafruit_Si7021();
 double temperature;
 double humidity;
-
-int count = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -41,8 +42,9 @@ void setup() {
   Serial.println();
 
   Serial.print("Attempting to connect to the MQTT broker: ");
-  Serial.println(broker);
-  if (!mqttClient.connect(broker, port)) {
+  Serial.println(*broker);
+  mqttClient.setId(deviceId);
+  if (!mqttClient.connect(*broker, port)) {
     Serial.print("MQTT connection failed! Error code = ");
     Serial.println(mqttClient.connectError());
     while (1);
