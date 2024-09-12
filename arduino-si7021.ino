@@ -15,8 +15,8 @@ const String deviceId = "basement";
 // const char broker[] = "JaysDesktop.local";
 const IPAddress* broker = new IPAddress(192, 168, 4, 100);
 const int port = 1883;
-const String topicTemperature = deviceId + ".temperature";
-const String topicHumidity = deviceId + ".humidity";
+const String topicTemperature = "arduino/" + deviceId + "/temperature";
+const String topicHumidity = "arduino/" + deviceId + "/humidity";
 
 const long interval = 1000; // milliseconds
 unsigned long previousMillis = 0;
@@ -73,7 +73,7 @@ void loop() {
     Serial.println(topicTemperature);
     Serial.println(temperature);
 
-    mqttClient.beginMessage(topicTemperature);
+    mqttClient.beginMessage(topicTemperature, true);
     mqttClient.print(temperature);
     mqttClient.endMessage();
 
@@ -81,7 +81,7 @@ void loop() {
     Serial.println(topicHumidity);
     Serial.println(humidity);
 
-    mqttClient.beginMessage(topicHumidity);
+    mqttClient.beginMessage(topicHumidity, true);
     mqttClient.print(humidity);
     mqttClient.endMessage();
 
