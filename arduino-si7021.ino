@@ -21,6 +21,8 @@ const String topicHumidity = "arduino/" + deviceId + "/humidity";
 const long interval = 1000; // milliseconds
 unsigned long previousMillis = 0;
 
+const long reconnectInterval = 60*1000; // milliseconds
+
 Adafruit_Si7021 si7021 = Adafruit_Si7021();
 double temperature;
 double humidity;
@@ -59,6 +61,15 @@ void loop() {
   // call poll() regularly to allow the library to send MQTT keep alive which
   // avoids being disconnected by the broker
   mqttClient.poll();
+  if (!mqttClient.connected()) {
+    Serial.println("MQTT disconnected!");
+    while (!mqttClient.connect(*broker, port)) {
+      Serial.print("MQTT connection failed! Error code = ");
+      Serial.println(mqttClient.connectError());
+      delay(reconnectInterval);
+    }
+    Serial.println("MQTT reconnected!");
+  }
 
   unsigned long currentMillis = millis();
 
