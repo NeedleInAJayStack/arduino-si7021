@@ -4,8 +4,10 @@
 #include "arduino_secrets.h"
 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
-char ssid[] = SECRET_SSID;
-char pass[] = SECRET_PASS;
+char wifiSsid[] = WIFI_SSID;
+char wifiPass[] = WIFI_PASS;
+char mqttUser[] = MQTT_USER;
+char mqttPass[] = MQTT_PASS;
 
 WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
@@ -34,8 +36,8 @@ void setup() {
   }
 
   Serial.print("Attempting to connect to WPA SSID: ");
-  Serial.println(ssid);
-  while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
+  Serial.println(wifiSsid);
+  while (WiFi.begin(wifiSsid, wifiPass) != WL_CONNECTED) {
     // failed, retry
     Serial.print(".");
     delay(5000);
@@ -46,6 +48,7 @@ void setup() {
   Serial.print("Attempting to connect to the MQTT broker: ");
   Serial.println(*broker);
   mqttClient.setId(deviceId);
+  mqttClient.setUsernamePassword(mqttUser, mqttPass);
   if (!mqttClient.connect(*broker, port)) {
     Serial.print("MQTT connection failed! Error code = ");
     Serial.println(mqttClient.connectError());
