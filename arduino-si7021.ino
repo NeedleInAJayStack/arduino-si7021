@@ -89,7 +89,7 @@ void loop() {
     Serial.println(topicTemperature);
     Serial.println(temperature);
 
-    mqttClient.beginMessage(topicTemperature, true);
+    mqttClient.beginMessage(topicTemperature);
     mqttClient.print(temperature);
     mqttClient.endMessage();
 
@@ -97,7 +97,7 @@ void loop() {
     Serial.println(topicHumidity);
     Serial.println(humidity);
 
-    mqttClient.beginMessage(topicHumidity, true);
+    mqttClient.beginMessage(topicHumidity);
     mqttClient.print(humidity);
     mqttClient.endMessage();
 
