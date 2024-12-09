@@ -4,6 +4,7 @@
 #include "arduino_secrets.h"
 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
+String deviceId = DEVICE_ID;
 char wifiSsid[] = WIFI_SSID;
 char wifiPass[] = WIFI_PASS;
 char mqttUser[] = MQTT_USER;
@@ -11,8 +12,6 @@ char mqttPass[] = MQTT_PASS;
 
 WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
-
-const String deviceId = "basement";
 
 // const char broker[] = "JaysDesktop.local";
 const IPAddress* broker = new IPAddress(192, 168, 4, 100);
@@ -34,6 +33,9 @@ void setup() {
   while (!Serial) {
     delay(10);
   }
+
+  Serial.print("I am device: ");
+  Serial.println(deviceId);
 
   Serial.print("Attempting to connect to WPA SSID: ");
   Serial.println(wifiSsid);
